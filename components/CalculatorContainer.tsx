@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { evaluate } from "mathjs";
+import { openAsBlob } from "fs";
 
 export const CalculatorContainer = () => {
     const [calcValue, setCalcValue] = useState<string>('');
@@ -13,11 +14,39 @@ export const CalculatorContainer = () => {
         ['1', '2', '3', '-'],
         ['0', '.', '=', '+'],
         ['+/-', '(', ')', '%'],
-        ['c']
+        ['c', 'del']
     ];
 
+    const operations = ['+', '-', '*', '/'];
+    const funcKey = ['(', ')', 'c', '=', '%', '+/-', '.', 'del'];
+
+    const handleNumber = (num: string) => {
+        if (calcValue == '0') {
+            setCalcValue(num);
+        } else {
+            let lastcalcValue = calcValue.length >= 1 && calcValue[calcValue.length - 1];
+            if (lastcalcValue == '/' || lastcalcValue == '*' || lastcalcValue == '-' || lastcalcValue == '+') {
+                setCalcValue(calcValue + ' ' + num);
+            } else {
+                setCalcValue(calcValue + num);
+            }
+        }
+    };
+
+    const handleOperation = (op: string) => {
+        if (calcValue.length > 0) {
+            let lastcalcValue = calcValue.length >= 1 && calcValue[calcValue.length - 1];
+            if (operations.includes(lastcalcValue.toString())) {
+                setCalcValue(calcValue);
+            } else
+                setCalcValue(calcValue + ' ' + op);
+        }
+    };
+
     const handleInput = (value: string) => {
-        if (!Number(value) && value !== "0") {
+        if (operations.includes(value) && value !== "0") {
+            handleOperation(value);
+        } else if (funcKey.includes(value)) {
             switch (value) {
                 case "=":
                     const res: number = evaluate(calcValue);
@@ -27,34 +56,42 @@ export const CalculatorContainer = () => {
                     setCalcValue('');
                     setAnswer('');
                     break;
-                case "/":
-                    setCalcValue(calcValue + value);
+                case "del":
+                    setCalcValue(calcValue.slice(0, calcValue.length - 1));
+                    if (calcValue.length == 1) {
+                        setAnswer('');
+                    }
                     break;
-                case "+":
-                    setCalcValue(calcValue + value);
+                case ".":
                     break;
-                case "-":
-                    setCalcValue(calcValue + value);
+                case "%":
                     break;
-                case "*": 
-                    setCalcValue(calcValue + value);
-                    break;
-                default: 
+                default:
                     break;
             }
         } else {
-            setCalcValue(calcValue + value);
+            handleNumber(value);
         }
     };
 
     useEffect(() => {
-        if (calcValue && (Number(calcValue[calcValue.length-1]) || calcValue[calcValue.length-1] == '0')) {
+        if (calcValue && (Number(calcValue[calcValue.length - 1]) || calcValue[calcValue.length - 1] == '0')) {
             console.log(calcValue);
             let res: number = evaluate(calcValue);
             console.log(res);
             setAnswer(res.toString());
         }
     }, [calcValue])
+
+    const colors = (v: string) => {
+        if (operations.includes(v)) {
+            return 'text-white bg-orange-400'
+        } else if (funcKey.includes(v)) {
+            return 'text-white bg-[#622B14]'
+        } else {
+            return 'text-white bg-black'
+        }
+    };
 
     return (
         <div className="dark:bg-white dark:text-black flex flex-col border border-gray-50 w-screen md:w-1/3 rounded-t-2xl">
@@ -65,7 +102,7 @@ export const CalculatorContainer = () => {
                     <div className="flex flex-row" key={index}>
                         {item.map((number, idx) => {
                             return (
-                                <button onClick={() => handleInput(number)} className="flex-2 text-white bg-black text-4xl p-4 border text-center" key={idx}>
+                                <button onClick={() => handleInput(number)} className={"flex-2 text-4xl p-4 border text-center " + colors(number)} key={idx}>
                                     {number}
                                 </button>
                             )
