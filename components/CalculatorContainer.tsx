@@ -63,8 +63,24 @@ export const CalculatorContainer = () => {
                     }
                     break;
                 case ".":
+                    if (calcValue.length > 0) {
+                        let splitArr = calcValue.split(' ');
+                        let lastcalcValue = splitArr && splitArr[splitArr.length - 1];
+                        if (lastcalcValue.includes(value)) {
+                            setCalcValue(calcValue);
+                        } else
+                            setCalcValue(calcValue + value);
+                    }
                     break;
                 case "%":
+                    if (calcValue.length > 0) {
+                        let splitArr = calcValue.split(' ');
+                        let lastcalcValue = splitArr && splitArr[splitArr.length - 1];
+                        if (lastcalcValue.includes(value)) {
+                            setCalcValue(calcValue);
+                        } else
+                            setCalcValue(calcValue + value);
+                    }
                     break;
                 default:
                     break;
