@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { evaluate } from "mathjs";
-import { openAsBlob } from "fs";
 
 export const CalculatorContainer = () => {
     const [calcValue, setCalcValue] = useState<string>('');
@@ -14,11 +13,12 @@ export const CalculatorContainer = () => {
         ['1', '2', '3', '-'],
         ['0', '.', '=', '+'],
         ['+/-', '(', ')', '%'],
+        ['1/x', 'sqrt(x)', 'x^y'],
         ['c', 'del']
     ];
 
     const operations = ['+', '-', '*', '/'];
-    const funcKey = ['(', ')', 'c', '=', '%', '+/-', '.', 'del'];
+    const funcKey = ['(', ')', 'c', '=', '%', '+/-', '.', 'del', '1/x', 'sqrt(x)', 'x^y', 'x^2'];
 
     const handleNumber = (num: string) => {
         if (calcValue == '0') {
@@ -117,20 +117,20 @@ export const CalculatorContainer = () => {
         } else if (funcKey.includes(v)) {
             return 'text-white bg-[#622B14]'
         } else {
-            return 'text-white bg-black'
+            return 'text-white bg-black border border-gray-700'
         }
     };
 
     return (
-        <div className="dark:bg-white dark:text-black flex flex-col border border-gray-600 w-screen md:w-1/3 rounded-t-2xl md:grow-0">
-            <div className="bg-black p-4 text-white rounded-t-2xl text-4xl wrap-break-word">{calcValue || 0}</div>
+        <div className="dark:bg-white dark:text-black flex flex-col w-screen md:w-1/3 md:grow-0 md:rounded-t-4xl">
+            <div className="bg-black p-4 text-white text-4xl wrap-break-word md:rounded-t-4xl">{calcValue || 0}</div>
             <div className="bg-black p-4 text-white text-4xl text-end">{answer ? '= ' + answer : ''}</div>
             {buttons.map((item, index) => {
                 return (
-                    <div className="flex flex-row" key={index}>
+                    <div className="flex flex-row bg-black" key={index}>
                         {item.map((number, idx) => {
                             return (
-                                <button onClick={() => handleInput(number)} className={"flex-2 text-2xl md:text-5xl p-4 border border-gray-600 text-center hover:opacity-80 " + colors(number)} key={idx}>
+                                <button key={idx} onClick={() => handleInput(number)} className={"mx-1 my-1 rounded-4xl flex-2 text-2xl md:text-4xl p-4 text-center hover:opacity-80 " + colors(number)}>
                                     {number}
                                 </button>
                             )
