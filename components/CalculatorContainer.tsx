@@ -27,6 +27,8 @@ export const CalculatorContainer = () => {
             let lastcalcValue = calcValue.length >= 1 && calcValue[calcValue.length - 1];
             if (lastcalcValue == '/' || lastcalcValue == '*' || lastcalcValue == '-' || lastcalcValue == '+') {
                 setCalcValue(calcValue + ' ' + num);
+            } else if (lastcalcValue == '%') {
+                setCalcValue(calcValue);
             } else {
                 setCalcValue(calcValue + num);
             }
@@ -66,7 +68,8 @@ export const CalculatorContainer = () => {
                     if (calcValue.length > 0) {
                         let splitArr = calcValue.split(' ');
                         let lastcalcValue = splitArr && splitArr[splitArr.length - 1];
-                        if (lastcalcValue.includes(value)) {
+                        let lastChar = calcValue[calcValue.length - 1];
+                        if (lastcalcValue.includes(value) || operations.includes(lastChar) || funcKey.includes(lastChar)) {
                             setCalcValue(calcValue);
                         } else
                             setCalcValue(calcValue + value);
@@ -76,11 +79,20 @@ export const CalculatorContainer = () => {
                     if (calcValue.length > 0) {
                         let splitArr = calcValue.split(' ');
                         let lastcalcValue = splitArr && splitArr[splitArr.length - 1];
-                        if (lastcalcValue.includes(value)) {
+                        let lastChar = calcValue[calcValue.length - 1];
+                        if (lastcalcValue.includes(value) || operations.includes(lastChar) || funcKey.includes(lastChar)) {
                             setCalcValue(calcValue);
                         } else
                             setCalcValue(calcValue + value);
                     }
+                    break;
+                case "(":
+                    setCalcValue(value);
+                    break;
+                case ")":
+                    setCalcValue(value);
+                    break;
+                case "+/-":
                     break;
                 default:
                     break;
@@ -110,7 +122,7 @@ export const CalculatorContainer = () => {
     };
 
     return (
-        <div className="dark:bg-white dark:text-black flex flex-col border border-gray-50 w-screen md:w-1/3 rounded-t-2xl">
+        <div className="dark:bg-white dark:text-black flex flex-col border border-gray-600 w-screen md:w-1/3 rounded-t-2xl md:grow-0">
             <div className="bg-black p-4 text-white rounded-t-2xl text-4xl wrap-break-word">{calcValue || 0}</div>
             <div className="bg-black p-4 text-white text-4xl text-end">{answer ? '= ' + answer : ''}</div>
             {buttons.map((item, index) => {
@@ -118,7 +130,7 @@ export const CalculatorContainer = () => {
                     <div className="flex flex-row" key={index}>
                         {item.map((number, idx) => {
                             return (
-                                <button onClick={() => handleInput(number)} className={"flex-2 text-4xl p-4 border text-center " + colors(number)} key={idx}>
+                                <button onClick={() => handleInput(number)} className={"flex-2 text-2xl md:text-5xl p-4 border border-gray-600 text-center hover:opacity-80 " + colors(number)} key={idx}>
                                     {number}
                                 </button>
                             )

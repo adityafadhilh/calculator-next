@@ -12,7 +12,7 @@ export default function Home() {
   // ];
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen">
+    <div className="flex flex-col md:items-center md:justify-center h-screen">
       {/* <h1 className="text-5xl mx-2 my-8 md:my-16 font-bold">Calculator</h1> */}
       <CalculatorContainer />
     </div>
