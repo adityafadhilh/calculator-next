@@ -13,8 +13,8 @@ export const CalculatorContainer = () => {
         ['1', '2', '3', '-'],
         ['0', '.', '=', '+'],
         ['+/-', '(', ')', '%'],
-        ['1/x', 'sqrt(x)', 'x^y', "x^2"],
-        ['c', 'del']
+        ['1/x', 'sqrt(x)', 'x^y'],
+        ['c', 'del', 'x^2']
     ];
 
     const operations = ['+', '-', '*', '/'];
@@ -109,17 +109,20 @@ export const CalculatorContainer = () => {
                         let splitArr = calcValue.split(' ');
                         let lastcalcValue = splitArr && splitArr[splitArr.length - 1];
                         let lastChar = calcValue[calcValue.length - 1];
-                        if (lastcalcValue.includes(value) || operations.includes(lastChar) || funcKey.includes(lastChar) || lastcalcValue == '') {
+                        console.log(lastChar);
+                        if (lastcalcValue.includes(value) || operations.includes(lastChar) || (!lastcalcValue.startsWith("(-") && funcKey.includes(lastChar)) || lastcalcValue == '') {
                             setCalcValue(calcValue);
-                        } else
+                        } else {
                             console.log(splitArr);
-                            if (splitArr[splitArr.length-1].startsWith("(-")) {
-                                console.log('here')
-                                splitArr[splitArr.length-1] = `${splitArr[splitArr.length-1].slice(2, splitArr[splitArr.length-1].length-1)}`;
+                            console.log(splitArr[splitArr.length - 1]);
+                            if (splitArr[splitArr.length - 1].startsWith("(-")) {
+                                console.log('here');
+                                splitArr[splitArr.length - 1] = `${splitArr[splitArr.length - 1].slice(2, splitArr[splitArr.length - 1].length - 1)}`;
                             } else {
-                                splitArr[splitArr.length-1] = `(-${splitArr[splitArr.length-1]})`
+                                splitArr[splitArr.length - 1] = `(-${splitArr[splitArr.length - 1]})`
                             }
                             setCalcValue(splitArr.join(' '));
+                        }
                     }
                     break;
                 case "1/x":
@@ -138,11 +141,11 @@ export const CalculatorContainer = () => {
                         let splitArr = calcValue.split(' ');
                         let lastcalcValue = splitArr && splitArr[splitArr.length - 1];
                         let lastChar = calcValue[calcValue.length - 1];
-                        if (lastcalcValue.includes(value) || operations.includes(lastChar) || funcKey.includes(lastChar) || lastcalcValue == '') {
+                        if (lastcalcValue.includes(value) || operations.includes(lastChar) || (!lastcalcValue.startsWith("(-") && funcKey.includes(lastChar)) || lastcalcValue == '') {
                             setCalcValue(calcValue);
                         } else
-                            splitArr[splitArr.length-1] = `sqrt(${splitArr[splitArr.length-1]})`;
-                            setCalcValue(splitArr.join(' '));
+                            splitArr[splitArr.length - 1] = `sqrt(${splitArr[splitArr.length - 1]})`;
+                        setCalcValue(splitArr.join(' '));
                     }
                     break;
                 case "x^y":
@@ -150,7 +153,7 @@ export const CalculatorContainer = () => {
                         let splitArr = calcValue.split(' ');
                         let lastcalcValue = splitArr && splitArr[splitArr.length - 1];
                         let lastChar = calcValue[calcValue.length - 1];
-                        if (lastcalcValue.includes(value) || operations.includes(lastChar) || funcKey.includes(lastChar)) {
+                        if (lastcalcValue.includes(value) || operations.includes(lastChar) || (!lastcalcValue.startsWith("(-") && funcKey.includes(lastChar))) {
                             setCalcValue(calcValue);
                         } else
                             setCalcValue(calcValue + "^");
@@ -161,7 +164,7 @@ export const CalculatorContainer = () => {
                         let splitArr = calcValue.split(' ');
                         let lastcalcValue = splitArr && splitArr[splitArr.length - 1];
                         let lastChar = calcValue[calcValue.length - 1];
-                        if (lastcalcValue.includes(value) || operations.includes(lastChar) || funcKey.includes(lastChar)) {
+                        if (lastcalcValue.includes(value) || operations.includes(lastChar) || (!lastcalcValue.startsWith("(-") && funcKey.includes(lastChar))) {
                             setCalcValue(calcValue);
                         } else
                             setCalcValue(calcValue + "^2");
@@ -175,14 +178,28 @@ export const CalculatorContainer = () => {
         }
     };
 
-    useEffect(() => {
-        if (calcValue && (Number(calcValue[calcValue.length - 1]) || calcValue[calcValue.length - 1] == '0')) {
-            console.log(calcValue);
-            let res: number = evaluate(calcValue);
-            console.log(res);
-            setAnswer(res.toString());
-        }
-    }, [calcValue])
+    // useEffect(() => {
+    //     if (calcValue && (Number(calcValue[calcValue.length - 1]) || calcValue[calcValue.length - 1] == '0')) {
+    //         console.log(calcValue);
+    //         let res: number = evaluate(calcValue);
+    //         console.log(res);
+    //         setAnswer(res.toString());
+    //     }
+    // }, [calcValue])
+
+    // useEffect(() => {
+    //     if (calcValue && (Number(calcValue[calcValue.length - 1]) || calcValue[calcValue.length - 1] == '0')) {
+    //         let splitArr = calcValue.split(' ');
+    //         let formatted = splitArr.map((it) => {
+    //             if (Number(it)) {
+    //                 return Number(it).toLocaleString();
+    //             } else {
+    //                 return it
+    //             }
+    //         });
+    //         setCalcValue(formatted.join(' '));
+    //     }
+    // }, [calcValue])
 
     const colors = (v: string) => {
         if (operations.includes(v)) {
