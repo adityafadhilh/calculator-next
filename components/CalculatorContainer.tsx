@@ -13,7 +13,7 @@ export const CalculatorContainer = () => {
         ['1', '2', '3', '-'],
         ['0', '.', '=', '+'],
         ['+/-', '(', ')', '%'],
-        ['1/x', 'sqrt(x)', 'x^y'],
+        ['1/x', 'sqrt(x)', 'x^y', "x^2"],
         ['c', 'del']
     ];
 
@@ -42,6 +42,18 @@ export const CalculatorContainer = () => {
                 setCalcValue(calcValue);
             } else
                 setCalcValue(calcValue + ' ' + op);
+        }
+    };
+
+    const handleFuncKey = (v: string) => {
+        if (calcValue.length > 0) {
+            let splitArr = calcValue.split(' ');
+            let lastcalcValue = splitArr && splitArr[splitArr.length - 1];
+            let lastChar = calcValue[calcValue.length - 1];
+            if (lastcalcValue.includes(v) || operations.includes(lastChar) || funcKey.includes(lastChar)) {
+                setCalcValue(calcValue);
+            } else
+                setCalcValue(calcValue + v);
         }
     };
 
@@ -93,6 +105,67 @@ export const CalculatorContainer = () => {
                     setCalcValue(value);
                     break;
                 case "+/-":
+                    if (calcValue.length > 0) {
+                        let splitArr = calcValue.split(' ');
+                        let lastcalcValue = splitArr && splitArr[splitArr.length - 1];
+                        let lastChar = calcValue[calcValue.length - 1];
+                        if (lastcalcValue.includes(value) || operations.includes(lastChar) || funcKey.includes(lastChar) || lastcalcValue == '') {
+                            setCalcValue(calcValue);
+                        } else
+                            console.log(splitArr);
+                            if (splitArr[splitArr.length-1].startsWith("(-")) {
+                                console.log('here')
+                                splitArr[splitArr.length-1] = `${splitArr[splitArr.length-1].slice(0, 1)}`;
+                            } else {
+                                splitArr[splitArr.length-1] = `(-${splitArr[splitArr.length-1]})`
+                            }
+                            setCalcValue(splitArr.join(' '));
+                    }
+                    break;
+                case "1/x":
+                    if (calcValue.length > 0) {
+                        let splitArr = calcValue.split(' ');
+                        let lastcalcValue = splitArr && splitArr[splitArr.length - 1];
+                        let lastChar = calcValue[calcValue.length - 1];
+                        if (lastcalcValue.includes(value) || operations.includes(lastChar) || funcKey.includes(lastChar)) {
+                            setCalcValue(calcValue);
+                        } else
+                            setCalcValue(calcValue + "^-1");
+                    }
+                    break;
+                case "sqrt(x)":
+                    if (calcValue.length > 0) {
+                        let splitArr = calcValue.split(' ');
+                        let lastcalcValue = splitArr && splitArr[splitArr.length - 1];
+                        let lastChar = calcValue[calcValue.length - 1];
+                        if (lastcalcValue.includes(value) || operations.includes(lastChar) || funcKey.includes(lastChar) || lastcalcValue == '') {
+                            setCalcValue(calcValue);
+                        } else
+                            splitArr[splitArr.length-1] = `sqrt(${splitArr[splitArr.length-1]})`;
+                            setCalcValue(splitArr.join(' '));
+                    }
+                    break;
+                case "x^y":
+                    if (calcValue.length > 0) {
+                        let splitArr = calcValue.split(' ');
+                        let lastcalcValue = splitArr && splitArr[splitArr.length - 1];
+                        let lastChar = calcValue[calcValue.length - 1];
+                        if (lastcalcValue.includes(value) || operations.includes(lastChar) || funcKey.includes(lastChar)) {
+                            setCalcValue(calcValue);
+                        } else
+                            setCalcValue(calcValue + "^");
+                    }
+                    break;
+                case "x^2":
+                    if (calcValue.length > 0) {
+                        let splitArr = calcValue.split(' ');
+                        let lastcalcValue = splitArr && splitArr[splitArr.length - 1];
+                        let lastChar = calcValue[calcValue.length - 1];
+                        if (lastcalcValue.includes(value) || operations.includes(lastChar) || funcKey.includes(lastChar)) {
+                            setCalcValue(calcValue);
+                        } else
+                            setCalcValue(calcValue + "^2");
+                    }
                     break;
                 default:
                     break;
