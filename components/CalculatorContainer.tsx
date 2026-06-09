@@ -57,14 +57,30 @@ export const CalculatorContainer = () => {
         }
     };
 
+    const validParentheses = (v: string) => {
+        let arr = [];
+        for (let i = 0; i < v.length; i++) {
+            if (v[i] == "(") {
+                arr.push("(");
+            } else if (v[i] == ")") {
+                arr.pop();
+            }
+        }
+        return arr.length > 0 ? false : true;
+    };
+
     const handleInput = (value: string) => {
         if (operations.includes(value) && value !== "0") {
             handleOperation(value);
         } else if (funcKey.includes(value)) {
             switch (value) {
                 case "=":
-                    const res: number = evaluate(calcValue);
-                    setCalcValue(res.toString());
+                    try {
+                        const res: number = evaluate(calcValue);
+                        setCalcValue(res.toString());
+                    } catch (error) {
+                        console.log(error);
+                    }
                     break;
                 case "c":
                     setCalcValue('');
@@ -99,10 +115,22 @@ export const CalculatorContainer = () => {
                     }
                     break;
                 case "(":
-                    setCalcValue(value);
+                    // let lastcalcValue = calcValue.length >= 1 && calcValue[calcValue.length - 1];
+                    setCalcValue(calcValue + ' ' + value);
+                    // setCalcValue(value);
                     break;
                 case ")":
-                    setCalcValue(value);
+                    if (!validParentheses(calcValue)) {
+                        if (calcValue.length > 0) {
+                            let lastcalcValue = calcValue.length >= 1 && calcValue[calcValue.length - 1];
+                            if (operations.includes(lastcalcValue.toString())) {
+                                setCalcValue(calcValue);
+                            } else
+                                setCalcValue(calcValue + value);
+                        }
+                    }
+
+                    // setCalcValue(value);
                     break;
                 case "+/-":
                     if (calcValue.length > 0) {
