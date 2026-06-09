@@ -27,7 +27,7 @@ export const CalculatorContainer = () => {
             let lastcalcValue = calcValue.length >= 1 && calcValue[calcValue.length - 1];
             if (lastcalcValue == '/' || lastcalcValue == '*' || lastcalcValue == '-' || lastcalcValue == '+') {
                 setCalcValue(calcValue + ' ' + num);
-            } else if (lastcalcValue == '%') {
+            } else if (lastcalcValue == '%' || lastcalcValue == ')') {
                 setCalcValue(calcValue);
             } else {
                 setCalcValue(calcValue + num);
@@ -115,7 +115,7 @@ export const CalculatorContainer = () => {
                             console.log(splitArr);
                             if (splitArr[splitArr.length-1].startsWith("(-")) {
                                 console.log('here')
-                                splitArr[splitArr.length-1] = `${splitArr[splitArr.length-1].slice(0, 1)}`;
+                                splitArr[splitArr.length-1] = `${splitArr[splitArr.length-1].slice(2, splitArr[splitArr.length-1].length-1)}`;
                             } else {
                                 splitArr[splitArr.length-1] = `(-${splitArr[splitArr.length-1]})`
                             }
