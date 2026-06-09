@@ -92,7 +92,7 @@ export const CalculatorContainer = () => {
                         let splitArr = calcValue.split(' ');
                         let lastcalcValue = splitArr && splitArr[splitArr.length - 1];
                         let lastChar = calcValue[calcValue.length - 1];
-                        if (lastcalcValue.includes(value) || operations.includes(lastChar) || funcKey.includes(lastChar)) {
+                        if (lastcalcValue.includes(value) || operations.includes(lastChar) || (!lastcalcValue.startsWith("(-") && funcKey.includes(lastChar))) {
                             setCalcValue(calcValue);
                         } else
                             setCalcValue(calcValue + value);
@@ -156,7 +156,7 @@ export const CalculatorContainer = () => {
                         if (lastcalcValue.includes(value) || operations.includes(lastChar) || (!lastcalcValue.startsWith("(-") && funcKey.includes(lastChar))) {
                             setCalcValue(calcValue);
                         } else
-                            setCalcValue(calcValue + "^");
+                            setCalcValue(calcValue + " ^ ");
                     }
                     break;
                 case "x^2":
